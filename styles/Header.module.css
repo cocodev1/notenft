@@ -1,0 +1,19 @@
+.header {
+    position: fixed;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin: 0;
+}
+
+.headerButton {
+    cursor: pointer;
+    color: #3772FF;
+    margin: 25px 35px;
+    font-size: 24px;
+}
+
+.headerButton:hover {
+    background-color: #151515CC;
+}

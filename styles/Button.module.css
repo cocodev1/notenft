@@ -1,0 +1,18 @@
+.button {
+    text-decoration: none;
+    display: inline-block;
+    outline: none;
+    border: 4px solid #3772FF;
+    border-radius: 18px;
+    margin: 40px;
+    padding: 25px 64px;
+    color: #FFEBEC;
+    background-color: #3772FF;
+    font-weight: 700;
+    font-size: 40px;
+    text-align: center;
+    display:  flex;
+    justify-content: center;
+    align-items: center;
+  }
+
