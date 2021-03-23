@@ -1,4 +1,5 @@
 import {useRouter} from 'next/router'
+import {Note, Account} from '../../models/models'
 
 export default function Account() {
 
@@ -15,8 +16,10 @@ export default function Account() {
 export async function getServerSideProps(context) {
 
     const {address} = context.params
+    const {notes} = await Note.find({creatorAddress: address}).exec()
+    console.log(notes)
 
     return {
-      props: {}, // will be passed to the page component as props
+      props: {notes}, // will be passed to the page component as props
     }
   }
