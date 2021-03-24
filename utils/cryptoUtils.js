@@ -15,7 +15,6 @@ async function encrypt(text) {
 
 async function decrypt(cipher, key) {
   const text = CryptoJS.AES.decrypt(cipher, key).toString(CryptoJS.enc.Utf8)
-  console.log({text})
   return text
 }
 

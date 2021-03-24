@@ -23,7 +23,7 @@ export default function Note({name, description, IPFSBlurLink, creatorAddress, t
 
     useEffect(async () => {
         if(accounts && accounts.length) {
-            const instance = await getInstance('window')
+            const instance = await getInstance()
             const balance = await instance.methods.balanceOf(accounts[0], id).call({from: accounts[0]})
             const uri = await instance.methods.uri(1).call()
             if(balance != 0) {

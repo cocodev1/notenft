@@ -1,0 +1,43 @@
+.notes {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 200px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 30px;
+    margin-left: 60px;
+}
+
+.profilePicContainer {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    margin-right: 30px;
+}
+
+.name {
+    font-weight: 500;
+    font-size: 40px;
+    margin: 0;
+}
+
+.address {
+    opacity: 0.5;
+}
+
+.gradiant {
+    background: linear-gradient(to right,#1dfada,#9d18c2);
+}

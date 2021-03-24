@@ -37,7 +37,7 @@ export default function send() {
         const {name, description, copies, price} = data
         const creator = accounts[0]
         const preview = image
-        const instance = await getInstance('window')
+        const instance = await getInstance()
         instance.once('Mint',{address: accounts[0]}, async (err, event) => {
             const id = event.returnValues.id
             const res = await axios.post(`/api/note/${id}`, {text, name, description, creator, id, preview, copies, price})

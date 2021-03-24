@@ -7,14 +7,14 @@ const NoteSchema = new mongoose.Schema({
     IPFSLink: String,
     IPFSBlurLink: String,
     key: String,
-    creatorAddress: String,
+    creatorAddress: {type: String, lowercase: true},
     time: {type: Date, default: Date.now},
     copies: Number
 })
 
 const AccountSchema = new mongoose.Schema({
     name: String,
-    adress: String,
+    address: {type: String, lowercase: true},
     profilePic: String,
     notes: [Number]
 })

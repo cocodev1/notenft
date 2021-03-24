@@ -2,14 +2,16 @@ import Web3 from 'web3'
 import Note from '../build/contracts/Note.json'
 import {useRouter} from 'next/router'
 
-async function getInstance(network = 'local') {
+async function getInstance(network) {
 
-    const networkUrl = (network == 'local' && process.env.LOCAL_PROVIDER)
-    || (network == 'mainet' && process.env.MAINET_PROVIDER)
-    || (network == 'ropsten' && process.env.ROPSTEN_PROVIDER)
-    || (network == 'rinkeby' && process.env.RINKEBY_PROVIDER)
-    || (network == 'window' && null)
-    || network
+    const networkUrl = //(network == 'local' && process.env.LOCAL_PROVIDER)
+    //|| (network == 'mainet' && process.env.MAINET_PROVIDER)
+    //|| (network == 'ropsten' && process.env.ROPSTEN_PROVIDER)
+    //|| (network == 'rinkeby' && process.env.RINKEBY_PROVIDER)
+    /*||*/ network
+    || (network == null && null)
+
+    console.log(networkUrl)
 
     let web3 = networkUrl ? new Web3(
         new Web3.providers.WebsocketProvider(networkUrl)

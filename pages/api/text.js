@@ -9,13 +9,15 @@ const handler = async (req, res) => {
 
     const {signature, signed, address, id, networkVersion} = req.query
 
+    console.log(networkVersion)
+
     const provider = 
     (networkVersion == 1 && process.env.MAINET_PROVIDER) 
     || (networkVersion == 3 && process.env.ROPSTEN_PROVIDER)
     || (networkVersion == 4 && process.env.RINKEBY_PROVIDER)
     || (networkVersion == 5777 && process.env.LOCAL_PROVIDER)
 
-    const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545")
+    const web3 = new Web3(new Web3.providers.WebsocketProvider(provider))
 
     const account = web3.eth.accounts.recover(signed, signature)
     if(address == account) {

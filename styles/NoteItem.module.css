@@ -1,0 +1,35 @@
+.container {
+    margin: 40px;
+}
+
+.preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.previewLock {
+    position: absolute;
+    padding: 0;
+}
+
+.description {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    margin-top: 8px;
+}
+
+.line {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.p {
+    margin: 6px;
+}

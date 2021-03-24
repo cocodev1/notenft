@@ -15,6 +15,7 @@ export default function Header() {
     }
     return (
         <header className={styles.header}>
+            <Link href='/upload'><p className={styles.headerButton}>Upload</p></Link>
             {accounts ? 
             <Link href={`/creator/${accounts[0]}`}>
                 <p className={styles.headerButton}>My note</p> 
