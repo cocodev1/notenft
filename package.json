@@ -10,6 +10,7 @@
   "dependencies": {
     "@openzeppelin/contracts": "^3.4.1",
     "@pinata/sdk": "^1.1.13",
+    "@truffle/hdwallet-provider": "1.2.2",
     "arraybuffer-to-buffer": "^0.0.7",
     "axios": "^0.21.1",
     "base64-arraybuffer": "^0.2.0",
