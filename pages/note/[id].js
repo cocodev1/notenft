@@ -9,8 +9,10 @@ import styles from '../../styles/Note.module.css'
 import dayjs from 'dayjs'
 import UnlockLogo from '../../components/UnlockLogo'
 import ReactMarkdown from 'react-markdown'
+import {Note} from '../../models/models'
+import mongoose from 'mongoose'
 
-export default function Note({name, description, IPFSBlurLink, creatorAddress, time, price, copies}) {
+export default function NotePage({name, description, IPFSBlurLink, creatorAddress, time, price, copies}) {
 
     const {accounts, networkVersion} = useContext(AccountContext)
 
@@ -40,6 +42,7 @@ export default function Note({name, description, IPFSBlurLink, creatorAddress, t
         web3.eth.personal.sign(hash, accounts[0], async (err, signature) => {
             err && console.log(err)
             const {data} = await axios.get('/api/text', {params: {signature, signed: hash, address: accounts[0], id, networkVersion}})
+            console.log(data)
             setText(data)
             setLoading(false)
         })
@@ -97,9 +100,23 @@ export async function getServerSideProps(context) {
 
     const {id} = context.query
 
-    const res = await axios.get(`http://localhost:3001/api/note/${id}`)
-    const data = await res.data
-    const {name, description, IPFSBlurLink, creatorAddress, time, copies} = data
+    async function activateDB() {
+
+        if(mongoose.connection.readyState >= 1) return
+        
+        mongoose.connect(`mongodb+srv://noteUser:${process.env.DB_PASS}@cluster0.bjqy0.mongodb.net/note?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true})
+  
+        const db = mongoose.connection;
+        db.on('error', console.error.bind(console, 'connection error:'))
+        db.once('open', function() {
+          return
+        })
+      }
+    await activateDB()
+
+    var note = await Note.findOne({id}, {key: 0}).exec()
+    note = JSON.parse(JSON.stringify(note))
+    const {name, description, IPFSBlurLink, creatorAddress, time, copies} = note
 
     return {
       props: {name, description, IPFSBlurLink, creatorAddress, time, copies}, // will be passed to the page component as props
