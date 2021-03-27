@@ -8,13 +8,16 @@ import Link from 'next/link'
 import styles from '../../styles/Note.module.css'
 import dayjs from 'dayjs'
 import UnlockLogo from '../../components/UnlockLogo'
-import ReactMarkdown from 'react-markdown'
 import {Note} from '../../models/models'
 import mongoose from 'mongoose'
+import Web3 from 'web3'
+import { OpenSeaPort, Network } from 'opensea-js'
+import { OrderSide } from 'opensea-js/lib/types'
 
 export default function NotePage({name, description, IPFSBlurLink, creatorAddress, time, price, copies}) {
 
     const {accounts, networkVersion} = useContext(AccountContext)
+    const [localPrice, setLocalPrice] = useState(price)
 
     const router = useRouter()
     const {id} = router.query
@@ -33,6 +36,21 @@ export default function NotePage({name, description, IPFSBlurLink, creatorAddres
             }
         }
     }, [accounts])
+
+    useEffect(async () => {
+        try {
+        const web3 = new Web3(window.ethereum)
+        const seaport = new OpenSeaPort(web3.currentProvider, {
+        networkName: Network.Rinkeby})
+        const { orders, count } = await seaport.api.getOrders({
+            asset_contract_address: getContractAdress(4),
+            token_id: id,
+            side: OrderSide.Sell
+          })
+        const numberWei = orders[orders.length-1].currentPrice.toNumber()
+        setLocalPrice(Web3.utils.fromWei(numberWei.toString(), 'ether'))
+        } catch (err) {console.log(err)}
+    }, [])
 
     function unlock() {
         setLoading(true)
@@ -83,7 +101,7 @@ export default function NotePage({name, description, IPFSBlurLink, creatorAddres
                     </div>
                     <div className={styles.businessInfo}>
                         <p className={styles.copies}>{copies} copies</p>
-                        <p className={styles.price}>{price || '2 ETH'}</p>
+                        <p className={styles.price}>{localPrice || 'Out'}</p>
                     </div>
                     <div className={styles.buttons}>
                         <Link href={
