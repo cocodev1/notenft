@@ -18,17 +18,19 @@ export default function Upload() {
 
     const router = useRouter()
 
-    const {setFile} = useContext(FileContext)
+    const {setFile, setExtension} = useContext(FileContext)
 
     const {getRootProps, getInputProps, open, acceptedFiles, isDragActive, fileRejections} = useDropzone({
         noClick: true,
         noKeyboard: true,
         multiple: false,
-        accept: '.md',
+        accept: '.md, .doc, .docx',
         validator: (file) => {
-            if(file.name.slice(-3).toLocaleLowerCase() != '.md') {
-                console.log(file.name, file.name.slice(-3))
-                return {}
+            var extension = file.name.split('.')
+            extension = extension[extension.length-1]
+            if(['md, doc, docx'].includes(extension)) {
+                console.log(file.name, extension)
+                return 
             } 
             return null
         }
@@ -38,6 +40,9 @@ export default function Upload() {
         console.log(acceptedFiles, fileRejections)
         if(acceptedFiles.length) {
             setFile(acceptedFiles[0])
+            var extension = acceptedFiles[0].name.split('.')
+            extension = extension[extension.length-1]
+            setExtension(extension)
             router.push({
                 pathname: '/send',
             })
@@ -51,7 +56,7 @@ export default function Upload() {
             <input {...getInputProps()} />
             <p className={styles.dropText}>Drag and drop <br />your file here <br/> or</p>
             <button className={styles.dropButton} onClick={open}>Choose file</button>
-            {fileRejections.length > 0 && <p className={styles.dropError}>Only markdown file are accepted</p>}
+            {fileRejections.length > 0 && <p className={styles.dropError}>Only .md, .doc, .docx file are accepted</p>}
         </div>
     </div>
     )

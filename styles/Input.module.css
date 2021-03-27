@@ -7,6 +7,10 @@
 
 }
 
+.containerNoMargin {
+    margin: 0;
+}
+
 .input {
     width: 100%;
     padding: auto;
@@ -54,6 +58,12 @@
     display: flex;
     justify-content: center;
 }
+
+.error {
+    color: #ff4242;
+    margin: 5px;
+}
+
 .spin {
     width: 40px;
     height: 40px;

@@ -31,4 +31,9 @@ function getWeb3() {
     }
 }
 
-export {getInstance, getWeb3}
+function getContractAdress(networkId) {
+    const deployedNetwork = Note.networks[networkId]
+    return deployedNetwork?.address
+}
+
+export {getInstance, getWeb3, getContractAdress}

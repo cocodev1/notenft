@@ -1,6 +1,6 @@
 import {useRouter} from 'next/router'
 import axios from 'axios'
-import {getInstance, getWeb3} from '../../utils/web3Utils'
+import {getInstance, getWeb3, getContractAdress} from '../../utils/web3Utils'
 import AccountContext from '../../contexts/AccountContext'
 import { useContext, useEffect, useState } from 'react'
 import Image from 'next/image'
@@ -69,7 +69,7 @@ export default function NotePage({name, description, IPFSBlurLink, creatorAddres
             </div>}
             {text && 
             <div className={[styles.preview, styles.md].join(' ')}>
-                {<ReactMarkdown>{text}</ReactMarkdown>}
+                <div dangerouslySetInnerHTML={{__html: text}}></div>
             </div>}
             <div className={styles.container}>
                 <div className={styles.info}>
@@ -86,8 +86,16 @@ export default function NotePage({name, description, IPFSBlurLink, creatorAddres
                         <p className={styles.price}>{price || '2 ETH'}</p>
                     </div>
                     <div className={styles.buttons}>
-                        <button className={`${styles.button} ${styles.opensea}`}>Opensea</button>
-                        <button className={`${styles.button} ${styles.rarible}`}>Rarible</button>
+                        <Link href={
+                            networkVersion == 4 ? `https://testnets.opensea.io/assets/${getContractAdress(4)}/${id}`
+                            : `https://opensea.io/assets/${getContractAdress(1)}/${id}`}
+                            passHref={true}>
+                            <button className={`${styles.button} ${styles.opensea}`}>Opensea</button>
+                        </Link>
+                        {networkVersion == 1 && <Link href={`https://rarible.com/token/${getContractAdress(1)}:${id}`}
+                        passHref={true}>
+                            <button className={`${styles.button} ${styles.rarible}`}>Rarible</button>
+                        </Link>}
                     </div>
                 </div>
             </div>
@@ -106,7 +114,7 @@ export async function getServerSideProps(context) {
         
         mongoose.connect(`mongodb+srv://noteUser:${process.env.DB_PASS}@cluster0.bjqy0.mongodb.net/note?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true})
   
-        const db = mongoose.connection;
+        const db = mongoose.connection
         db.on('error', console.error.bind(console, 'connection error:'))
         db.once('open', function() {
           return

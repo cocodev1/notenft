@@ -19,6 +19,7 @@ res.send({
             value: creatorAddress
         }
     ],
+    background_color: '25292D'
 })
 
 }

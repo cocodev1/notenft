@@ -5,11 +5,38 @@ import styles from '../../styles/Creator.module.css'
 import mongoose from 'mongoose'
 import Image from 'next/image'
 import Chance from 'chance'
+import Web3 from 'web3'
+import { OpenSeaPort, Network } from 'opensea-js'
+import { OrderSide } from 'opensea-js/lib/types'
+import { useEffect, useState } from 'react'
+import {getContractAdress} from '../../utils/web3Utils'
+
 
 export default function AccountPage({notes, profilePic, name}) {
 
     const router = useRouter()
     const {address} = router.query
+    const [localNotes, setLocalNotes] = useState(notes)
+
+    useEffect(async () => {
+      const web3 = new Web3(window.ethereum)
+      const seaport = new OpenSeaPort(web3.currentProvider, {
+        networkName: Network.Rinkeby
+      })
+      const updatedNotes = await Promise.all(notes.map(async note => {
+        try {
+          const { orders, count } = await seaport.api.getOrders({
+            asset_contract_address: getContractAdress(4),
+            token_id: note.id,
+            side: OrderSide.Sell
+          })
+          const numberWei = orders[orders.length-1].currentPrice.toNumber()
+          return {...note, price: Web3.utils.fromWei(numberWei.toString(), 'ether')}
+        } catch(err) {return note}
+      }))
+      console.log(updatedNotes)
+      setLocalNotes(updatedNotes)
+    }, [notes])
 
 
     return (
@@ -24,7 +51,7 @@ export default function AccountPage({notes, profilePic, name}) {
           </div>
         </div>
         <div className={styles.notes}>
-          {notes.map(note => (<NoteItem {...note} noteName={note.name}/>))}
+          {localNotes && localNotes.map(localNote => (<NoteItem {...localNote} noteName={localNote.name}/>))}
         </div>
       </div>
     )

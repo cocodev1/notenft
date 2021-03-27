@@ -10,6 +10,7 @@ function MyApp({ Component, pageProps }) {
 
   const [accounts, setAccounts] = useState(null)
   const [file, setFile] = useState(null)
+  const [extension, setExtension] = useState(null)
   
   const [networkVersion, setNetworkVersion] = useState(5777)
 
@@ -31,7 +32,9 @@ function MyApp({ Component, pageProps }) {
     }}>
       <FileContext.Provider value={{
         file: file,
-        setFile: setFile
+        setFile: setFile,
+        extension: extension,
+        setExtension: setExtension
       }}>
          <Head>
           <title>NFT Note</title>
