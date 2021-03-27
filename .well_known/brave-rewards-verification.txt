@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: notenft.com
+Token: 47dbffaf6c28137c2a91af807ac986acc56957d9a70f3ca8be56c47386ff10bf
