@@ -39,8 +39,8 @@ function MyApp({ Component, pageProps }) {
          <Head>
           <title>NFT Note</title>
           <link rel="icon" href="/notebook.ico" />
-        </Head>
-        <Header />
+         </Head>
+        {/*<Header />*/}
         <Component {...pageProps} />
       </FileContext.Provider>  
     </AccountContext.Provider>

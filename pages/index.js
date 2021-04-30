@@ -10,10 +10,10 @@ export default function Home() {
         <h1 className={styles.welcomeTitle}>Buy and sell notes <br /> as NFTs</h1>
         <h2 className={styles.welcomeDescription}>Tokenize your notes on the Blockchain <br/> and sell it to OpenSea and Rarible</h2>
         <div className={styles.welcomeButtons}>
-          <Link href='/upload'>
+          <Link href='/soon'>
             <button className={styles.welcomeButton}>Upload</button>
           </Link>
-          <Link href='/market'>
+          <Link href='/soon'>
             <button className={styles.marketButton + ' ' + styles.welcomeButton}>Market</button>
           </Link>
         </div>
