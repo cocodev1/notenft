@@ -7,8 +7,8 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.welcomeTitle}>Buy and sell notes <br /> as NFTs</h1>
-        <h2 className={styles.welcomeDescription}>Tokenize your notes on the Blockchain <br/> and sell it to OpenSea and Rarible</h2>
+        <h1 className={styles.welcomeTitle}>Buy and sell files <br /> as NFTs</h1>
+        <h2 className={styles.welcomeDescription}>Tokenize your files on the Blockchain <br/> and sell it to OpenSea and Rarible</h2>
         <div className={styles.welcomeButtons}>
           <Link href='/soon'>
             <button className={styles.welcomeButton}>Upload</button>
