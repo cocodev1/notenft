@@ -10,7 +10,7 @@ export default function Home() {
         <h1 className={styles.welcomeTitle}>Buy and sell files <br /> as NFTs</h1>
         <h2 className={styles.welcomeDescription}>Tokenize your files on the Blockchain <br/> and sell it to OpenSea and Rarible</h2>
         <div className={styles.welcomeButtons}>
-          <Link href='/soon'>
+          <Link href='/upload'>
             <button className={styles.welcomeButton}>Upload</button>
           </Link>
           <Link href='/soon'>
