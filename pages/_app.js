@@ -39,6 +39,7 @@ function MyApp({ Component, pageProps }) {
          <Head>
           <title>NFT Note</title>
           <link rel="icon" href="/notebook.ico" />
+          <meta name="description" content="Convert file to NFT" />
          </Head>
         {/*<Header />*/}
         <Component {...pageProps} />
