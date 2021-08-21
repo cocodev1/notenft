@@ -38,13 +38,16 @@ function MyApp({ Component, pageProps }) {
       }}>
          <Head>
          <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
-         <script>
+         <script dangerouslySetInnerHTML={{
+              __html: `
             window.dataLayer = window.dataLayer || [];
-            function gtag(){window.dataLayer.push(arguments)}
-            gtag('js', new Date())
-
-            gtag('config', process.env.NEXT_PUBLIC_GA_ID)
-          </script>
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+            }}/>
           <title>NFT Note</title>
           <link rel="icon" href="/notebook.ico" />
           <meta name="description" content="Convert file to NFT" />
