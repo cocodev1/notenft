@@ -41,8 +41,20 @@ function MyApp({ Component, pageProps }) {
         setExtension: setExtension
       }}>
          <Head>
+         <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
+         <script dangerouslySetInnerHTML={{
+              __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+            }}/>
           <title>NFT Note</title>
           <link rel="icon" href="/notebook.ico" />
+          <meta name="description" content="Convert file to NFT" />
          </Head>
         {/*<Header />*/}
         <Component {...pageProps} />
