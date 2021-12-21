@@ -41,9 +41,9 @@ export default function NotePage({name, description, IPFSBlurLink, creatorAddres
         try {
         const web3 = new Web3(window.ethereum)
         const seaport = new OpenSeaPort(web3.currentProvider, {
-        networkName: Network.Rinkeby})
+        networkName: (networkVersion == 1 && Network.Main) || (networkVersion == 4 && Network.Rinkeby)})
         const { orders, count } = await seaport.api.getOrders({
-            asset_contract_address: getContractAdress(4),
+            asset_contract_address: getContractAdress(networkVersion),
             token_id: id,
             side: OrderSide.Sell
           })

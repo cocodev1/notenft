@@ -24,7 +24,6 @@ export default function Upload() {
         noClick: true,
         noKeyboard: true,
         multiple: false,
-        accept: '.md, .doc, .docx',
         validator: (file) => {
             var extension = file.name.split('.')
             extension = extension[extension.length-1]
@@ -56,7 +55,6 @@ export default function Upload() {
             <input {...getInputProps()} />
             <p className={styles.dropText}>Drag and drop <br />your file here <br/> or</p>
             <button className={styles.dropButton} onClick={open}>Choose file</button>
-            {fileRejections.length > 0 && <p className={styles.dropError}>Only .md, .doc, .docx file are accepted</p>}
         </div>
     </div>
     )

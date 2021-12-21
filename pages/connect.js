@@ -11,14 +11,19 @@ export default function Connect() {
     const [isWindow, setIsWindow] = useState(false)
 
     useEffect(() => {
-        if(window) setIsWindow(true)
+        const run = async () => {
+            if(window) { 
+                setIsWindow(true)
+                await getAccounts()
+            }
+        }
+        run()
     }, [])
 
     const {accounts, setAccounts} = useContext(AccountContext)
 
-    async function onClick() {
+    async function getAccounts() {
         const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
-        console.log(accounts)
         setAccounts(accounts)
         router.back()
     }
@@ -31,7 +36,7 @@ export default function Connect() {
             <div className={styles.container}>
                 <p className={styles.title}>Connect your wallet</p>
                 <Image src='/Metamask.png' width={300} height={300} layout='fixed'/>
-                <button className={styles.button} onClick={onClick}>Connect</button>
+                <button className={styles.button} onClick={getAccounts}>Connect</button>
             </div>}
             {isWindow && !window.ethereum && <BigTilte>You don't have metamask</BigTilte>}
         </div>

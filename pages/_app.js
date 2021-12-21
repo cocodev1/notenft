@@ -8,9 +8,9 @@ import Head from 'next/head'
 
 function MyApp({ Component, pageProps }) {
 
-  const [accounts, setAccounts] = useState(null)
-  const [file, setFile] = useState(null)
-  const [extension, setExtension] = useState(null)
+  const [accounts, setAccounts] = useState()
+  const [file, setFile] = useState()
+  const [extension, setExtension] = useState()
   
   const [networkVersion, setNetworkVersion] = useState(5777)
 
@@ -19,7 +19,11 @@ function MyApp({ Component, pageProps }) {
       const web3 = new Web3(window.ethereum)
       const accs = await web3.eth.getAccounts()
       if(accs.length) setAccounts(accs)
-      setNetworkVersion(window.ethereum.networkVersion)
+      setNetworkVersion(parseInt(window.ethereum.networkVersion))
+      ethereum.on('chainChanged', (chainId) => {
+        setNetworkVersion(parseInt(chainId))
+        console.log(chainId)
+      })
     }
   }, [])
 

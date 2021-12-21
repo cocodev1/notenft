@@ -3,12 +3,11 @@ import Note from '../build/contracts/Note.json'
 import {useRouter} from 'next/router'
 
 async function getInstance(network) {
-
-    const networkUrl = //(network == 'local' && process.env.LOCAL_PROVIDER)
-    //|| (network == 'mainet' && process.env.MAINET_PROVIDER)
-    //|| (network == 'ropsten' && process.env.ROPSTEN_PROVIDER)
-    //|| (network == 'rinkeby' && process.env.RINKEBY_PROVIDER)
-    /*||*/ network
+    console.log(network)
+    const networkUrl = (network == 'local' && process.env.LOCAL_PROVIDER)
+    || (network == 1 && process.env.MAINET_PROVIDER)
+    || (network == 3 && process.env.ROPSTEN_PROVIDER)
+    || (network == 4 && process.env.RINKEBY_PROVIDER)
     || (network == null && null)
 
     console.log(networkUrl)
