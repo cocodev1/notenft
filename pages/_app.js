@@ -56,7 +56,7 @@ function MyApp({ Component, pageProps }) {
           <link rel="icon" href="/notebook.ico" />
           <meta name="description" content="Convert file to NFT" />
          </Head>
-        {/*<Header />*/}
+        {<Header />}
         <Component {...pageProps} />
       </FileContext.Provider>  
     </AccountContext.Provider>

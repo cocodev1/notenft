@@ -104,13 +104,11 @@ export default function NotePage({name, description, IPFSBlurLink, creatorAddres
                         <p className={styles.price}>{localPrice || 'Out'}</p>
                     </div>
                     <div className={styles.buttons}>
-                        <Link href={
-                            networkVersion == 4 ? `https://testnets.opensea.io/assets/${getContractAdress(4)}/${id}`
-                            : `https://opensea.io/assets/${getContractAdress(1)}/${id}`}
+                        <Link href={`https://testnets.opensea.io/assets/${getContractAdress(networkVersion)}/${id}`}
                             passHref={true}>
                             <button className={`${styles.button} ${styles.opensea}`}>Opensea</button>
                         </Link>
-                        {networkVersion == 1 && <Link href={`https://rarible.com/token/${getContractAdress(1)}:${id}`}
+                        {<Link href={`https://rarible.com/token/${getContractAdress(networkVersion)}:${id}`}
                         passHref={true}>
                             <button className={`${styles.button} ${styles.rarible}`}>Rarible</button>
                         </Link>}
@@ -124,7 +122,7 @@ export default function NotePage({name, description, IPFSBlurLink, creatorAddres
 
 export async function getServerSideProps(context) {
 
-    const {id} = context.query
+    const {id, networdId} = context.query
 
     async function activateDB() {
 
@@ -140,7 +138,7 @@ export async function getServerSideProps(context) {
       }
     await activateDB()
 
-    var note = await Note.findOne({id}, {key: 0}).exec()
+    var note = await Note.findOne({id, networdId}, {key: 0}).exec()
     note = JSON.parse(JSON.stringify(note))
     const {name, description, IPFSBlurLink, creatorAddress, time, copies} = note
 

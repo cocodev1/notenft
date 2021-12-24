@@ -16,6 +16,7 @@ const handler = async (req, res) => {
     || (networkVersion == 3 && process.env.ROPSTEN_PROVIDER)
     || (networkVersion == 4 && process.env.RINKEBY_PROVIDER)
     || (networkVersion == 5777 && process.env.LOCAL_PROVIDER)
+    || (networkVersion == 80001 && process.env.RINKEBY_MUMBAI_PROVIDER)
 
     const web3 = new Web3(new Web3.providers.WebsocketProvider(provider))
 
@@ -24,7 +25,7 @@ const handler = async (req, res) => {
         const instance = await getInstance(provider)
         const balance = await instance.methods.balanceOf(account, id).call({from: account})
         if(balance != 0) {
-            const {IPFSLink, key} = await Note.findOne({id}).exec()
+            const {IPFSLink, key} = await Note.findOne({id, networkId: networkVersion}).exec()
             const {data} = await axios.get(IPFSLink)
             const text = await decrypt(data, key)
             res.send(text)

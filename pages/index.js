@@ -2,6 +2,9 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 //import NoteContract from '../contracts/Note.json'
+import Modal from 'react-modal'
+
+Modal.setAppElement('#__next')
 
 export default function Home() {
   return (

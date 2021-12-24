@@ -8,6 +8,8 @@ async function getInstance(network) {
     || (network == 1 && process.env.MAINET_PROVIDER)
     || (network == 3 && process.env.ROPSTEN_PROVIDER)
     || (network == 4 && process.env.RINKEBY_PROVIDER)
+    || (network == 80001 && process.env.RINKEBY_MUMBAI_PROVIDER)
+    || (network == 5777 && process.env.LOCAL_PROVIDER)
     || (network == null && null)
 
     console.log(networkUrl)

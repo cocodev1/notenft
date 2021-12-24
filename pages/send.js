@@ -14,6 +14,7 @@ import { OpenSeaPort, Network } from 'opensea-js'
 import Web3 from 'web3'
 import mammoth from 'mammoth'
 import showdown from 'showdown'
+import CheckModal from '../components/CheckModal'
 
 export default function send() {
 
@@ -26,6 +27,10 @@ export default function send() {
     const [image, takeScreenshot] = useScreenshot()
 
     const ref = useRef(null)
+
+    const [isOpen, setIsOpen] = useState(false)
+    const [isMined, setIsMined] = useState(false)
+    const [isUploaded, setIsUploaded] = useState(false)
 
     useEffect(async () => {
         if(extension == 'md') {
@@ -45,12 +50,36 @@ export default function send() {
         name: yup.string().required(),
         description: yup.string().required(),
         copies: yup.number().required().positive().integer(),
-        price: yup.number().positive().required()
+        price: yup.number().positive()
     })
 
     const { register, handleSubmit, watch, errors } = useForm({resolver: yupResolver(NoteSchema)})
 
+    const setPriceOnOpensea = async () => {
+        const web3 = new Web3(window.ethereum)
+        if(networkVersion == 1 || networkVersion == 3) {
+            const provider = web3.currentProvider
+            const seaport = new OpenSeaPort(provider, {
+            networkName: networkVersion == 1 ? Network.Main : Network.Rinkeby
+            })
+            const listing = await seaport.createSellOrder({
+                asset: {
+                tokenId: id,
+                tokenAddress: '0xf527031ec152922616ff75edaff3cfbf11e69a6f',
+                schemaName: 'ERC1155'
+                },
+                accountAddress: accounts[0],
+                startAmount: price,
+                // If `endAmount` is specified, the order will decline in value to that amount until `expirationTime`. Otherwise, it's a fixed-price order:
+                expirationTime,
+                quantity: copies,
+            })
+            const expirationTime = Math.round(Date.now() / 1000 + 60 * 60 * 24)
+        }
+    }
+ 
     const onSubmit = async (data) => {
+        setIsOpen(true)
         setLoading(true)
         takeScreenshot(ref.current)
         const text = fileContent
@@ -58,39 +87,22 @@ export default function send() {
         const creator = accounts[0]
         const preview = image
         const instance = await getInstance(networkVersion)
-        instance.once('Mint',{address: accounts[0]}, async (err, event) => {
-            const id = event.returnValues.id
-            const res = await axios.post(`/api/note/${id}`, {text, name, description, creator, id, preview, copies, price})
-            if(res.status == 200) {
-                const web3 = new Web3(window.ethereum)
-                if(networkVersion == 1 || networkVersion == 3) {
-                    const provider = web3.currentProvider
-                    const seaport = new OpenSeaPort(provider, {
-                    networkName: networkVersion == 1 ? Network.Main : Network.Rinkeby
-                    })
-                    const listing = await seaport.createSellOrder({
-                        asset: {
-                        tokenId: id,
-                        tokenAddress: '0xf527031ec152922616ff75edaff3cfbf11e69a6f',
-                        schemaName: 'ERC1155'
-                        },
-                        accountAddress: accounts[0],
-                        startAmount: price,
-                        // If `endAmount` is specified, the order will decline in value to that amount until `expirationTime`. Otherwise, it's a fixed-price order:
-                        expirationTime,
-                        quantity: copies,
-                    })
-                    const expirationTime = Math.round(Date.now() / 1000 + 60 * 60 * 24)
-                }
-                setLoading(false)
-                router.replace(`/note/${id}`)
-            }else {
-
-            }
-
-        })
         try {
-        await instance.methods.mint(copies).send({from: accounts[0]})
+        instance.methods.mint(copies).send({from: accounts[0]})
+            .on('receipt', async receipt => {
+                setIsMined(true)
+                console.log(receipt)
+                const id = receipt.events.Mint.returnValues.id
+                const res = await axios.post(`/api/note/${id}`, {networkId: networkVersion, text, name, description, creator, id, preview, copies, price})
+                setIsUploaded(true)
+                if(res.status == 200) {
+                    await setPriceOnOpensea()
+                    setLoading(false)
+                    router.replace(`/note/${id}?networkId=${networkVersion}`)
+                }else {
+    
+                }
+            })
         } catch (err) {
             setLoading(false)
             throw err
@@ -111,8 +123,9 @@ export default function send() {
                     <Input name='copies' placeholder='Type a number' register={register} error={errors.copies}>Number of copies</Input>
                     {(networkVersion == 1 || networkVersion == 4) && <Input name='price' placeholder='Type a number' register={register} error={errors.price}>Price</Input>}
                     <Input button={true} loading={loading}>Mint</Input>
+                    <CheckModal {...{isOpen, isMined, isUploaded}}/>
                 </form>
-            </div>    
+            </div>  
         </div>
     )
 }

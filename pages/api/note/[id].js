@@ -8,11 +8,11 @@ import fs from 'fs'
 
 const handler = async (req, res) => {
 
-    const {id} = req.query
+    const {networkId, id} = req.query
 
     if(req.method == 'POST') {
-
-        const {text, name, description, creator, id, preview, price, copies} = req.body
+        console.log('SSSS')
+        const {networkId, text, name, description, creator, id, preview, price, copies} = req.body
 
 
         const {cipher, key} = await encrypt(text)
@@ -31,7 +31,7 @@ const handler = async (req, res) => {
             withCredentials: true
         })
         var IpfsPreviewHash = `https://gateway.pinata.cloud/ipfs/${result.data.IpfsHash}`
-
+        console.log('GGGGGGGGGG')
         const dataCipher = new FormData()
         dataCipher.append('file', cipher, 'file')
         result = await axios.post('https://api.pinata.cloud/pinning/pinFileToIPFS', dataCipher, {
@@ -45,6 +45,7 @@ const handler = async (req, res) => {
         var IpfsCipherHash = `https://gateway.pinata.cloud/ipfs/${result.data.IpfsHash}`
 
         const note = new Note({
+            networkId,
             id,
             name,
             description,
@@ -63,7 +64,7 @@ const handler = async (req, res) => {
         res.send({status: 'ok', data: {id: id}})
 
     }else {
-        const note = await Note.findOne({id}, {key: 0}).exec()
+        const note = await Note.findOne({id, networkId}, {key: 0}).exec()
         res.send(note)
     }
 

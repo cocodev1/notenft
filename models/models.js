@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
 const NoteSchema = new mongoose.Schema({
+    networkId: Number,
     id: Number,
     name: String,
     description: String,
